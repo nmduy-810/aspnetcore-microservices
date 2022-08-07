@@ -1,4 +1,6 @@
 using Common.Logging;
+using Product.API.Extensions;
+using Product.API.Persistence;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,33 +12,34 @@ try
     // Add serilog
     builder.Host.UseSerilog(Serilogger.Configure);
 
-    // Add services to the container.
-    builder.Services.AddControllers();
-
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    // Add host to the container from ConfigureHostExtensions.cs
+   builder.Host.AddAppConfigurations();
+   
+   // Add services to the container from ServiceExtension.cs
+   builder.Services.AddInfrastructure(builder.Configuration); 
 
     var app = builder.Build();
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
-
-    app.UseHttpsRedirection();
-
-    app.UseAuthorization();
-
-    app.MapControllers();
+    // Add app to the container from ApplicationExtensions.cs
+    app.UseInfrastructure();
+    
+    // Automatic migration when run programs (after migrations, call seed class
+    app.MigrateDatabase<ProductContext>((context, _) =>
+        {
+            ProductContextSeed.SeedProductAsync(context, Log.Logger).Wait();
+        }).Run();
 
     app.Run();
 }
 catch (Exception exception)
 {
-    Log.Fatal(exception, "Unhandled exception");
+    var type = exception.GetType().Name;
+    if (type.Equals("StopTheHostException", StringComparison.Ordinal)) // If migration fail, block fail
+    {
+        throw;
+    }
+    
+    Log.Fatal(exception, "Unhandled exception: {ExceptionMessage}", exception.Message);
 }
 finally
 {
