@@ -21,7 +21,7 @@ public static class ServiceExtensions
         services.AddSwaggerGen();
         services.ConfigureProductDbContext(configuration); // Generate connection string with mysql database
         services.AddInfrastructureServices();
-        
+        services.AddAutoMapper(cfg => cfg.AddProfile(new MappingProfile()));
         return services;
     }
 

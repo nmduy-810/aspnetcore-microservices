@@ -11,7 +11,7 @@ public class ProductContext : DbContext
         
     }
 
-    public DbSet<CatalogProduct> CatalogProducts { get; set; }
+    public DbSet<CatalogProduct> CatalogProducts { get; set; } = default!;
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {

@@ -20,7 +20,7 @@ public static class HostExtensions
             logger.LogInformation("Migrated MySQL database");
             InvokeSeeder(seeder!, context, services);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             logger.LogError("An error occurred while migrating the MySQL database");
         }
