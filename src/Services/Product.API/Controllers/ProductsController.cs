@@ -9,12 +9,12 @@ namespace Product.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductController : ControllerBase
+public class ProductsController : ControllerBase
 {
     private readonly IProductRepository _repository;
     private readonly IMapper _mapper;
 
-    public ProductController(IProductRepository repository, IMapper mapper)
+    public ProductsController(IProductRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
@@ -44,6 +44,10 @@ public class ProductController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto productDto)
     {
+        var productEntity = await _repository.GetProductByNo(productDto.No);
+        if (productEntity != null)
+            return BadRequest($"Product No: {productDto.No} is existed");
+        
         var product = _mapper.Map<CatalogProduct>(productDto);
         await _repository.CreateProduct(product);
         await _repository.SaveChangesAsync();
@@ -65,7 +69,7 @@ public class ProductController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id:long}")]
     public async Task<IActionResult> DeleteProduct([Required] long id)
     {
         var product = await _repository.GetProduct(id);
