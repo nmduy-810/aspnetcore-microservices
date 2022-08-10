@@ -20,7 +20,14 @@ services:
   #infrastructure section
   rabbitmq:
     image: rabbitmq:3-management-alpine
-  
+    
+  #microservices api section
+  product.api:
+    image: ${DOCKER_REGISTRY-}product-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+        context: .
+        dockerfile: Services/Product.API/Dockerfile
+    
   pgadmin:
     image: dpage/pgadmin4
     
