@@ -30,7 +30,7 @@ public interface IRepositoryQueryBase<T, TK, TContext>
 /// <typeparam name="T"></typeparam>
 /// <typeparam name="TK"></typeparam>
 /// <typeparam name="TContext"></typeparam>
-public interface IRepositoryBaseAsync<T, TK, TContext> : IRepositoryQueryBase<T, TK, TContext>
+public interface IRepositoryBase<T, TK, TContext> : IRepositoryQueryBase<T, TK, TContext>
     where T : EntityBase<TK> 
     where TContext : DbContext
 {

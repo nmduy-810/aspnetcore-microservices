@@ -22,8 +22,7 @@ public static class ServiceExtensions
         services.ConfigureCustomerDbContext(configuration);
         
         services.AddScoped<ICustomerRepository, CustomerRepository>()
-            .AddScoped(typeof(IRepositoryBaseAsync<,,>), typeof(RepositoryBaseAsync<,,>))
-            .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
+            .AddScoped(typeof(IRepositoryQueryBase<,,>), typeof(RepositoryQueryBase<,,>))
             .AddScoped<ICustomerService, CustomerService>();
 
         services.AddAutoMapper(cfg => cfg.AddProfile(new MappingProfile()));
