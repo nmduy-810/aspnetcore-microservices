@@ -1,42 +1,41 @@
+using Basket.API.Extensions;
 using Common.Logging;
 using Serilog;
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+
 var builder = WebApplication.CreateBuilder(args);
 
-Log.Information("Starting Basket API up");
+Log.Information("Start {ApplicationName} with {EnvironmentName} environment up", 
+    builder.Environment.ApplicationName, builder.Environment.EnvironmentName);
 
 try
 {
     // Add serilog
     builder.Host.UseSerilog(Serilogger.Configure);
+    
+    // Add host to the container from ConfigureHostExtensions.cs
+    builder.Host.AddAppConfiguration();
 
-    // Add services to the container.
-    builder.Services.AddControllers();
-
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    // Add services to the container from ServiceExtensions.cs
+    builder.Services.AddInfrastructure(builder.Configuration);
 
     var app = builder.Build();
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
-
-    app.UseHttpsRedirection();
-
-    app.UseAuthorization();
-
-    app.MapControllers();
-
+    // Add app to the container from ApplicationExtensions.cs
+    app.UseInfrastructure();
+    
     app.Run();
 }
 catch (Exception exception)
 {
-    Log.Fatal(exception, "Unhandled exception");
+    var type = exception.GetType().Name;
+    if (type.Equals("StopTheHostException", StringComparison.Ordinal))
+        throw;
+    
+    Log.Fatal(exception, "Unhandled exception: {ExceptionMessage}", exception.Message);
 }
 finally
 {
