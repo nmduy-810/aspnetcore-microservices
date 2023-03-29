@@ -46,4 +46,10 @@ public class ProductContext : DbContext
     }
 
     public DbSet<CatalogProduct> Products { get; set; } = default!;
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<CatalogProduct>().HasIndex(x => x.No).IsUnique();
+    }
 }
