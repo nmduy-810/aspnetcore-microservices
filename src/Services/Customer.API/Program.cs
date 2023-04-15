@@ -29,7 +29,7 @@ try
     builder.Services.AddDbContext<CustomerContext>(options => options.UseNpgsql(connectionString));
 
     builder.Services.AddScoped<ICustomerRepository, CustomerRepository>()
-        .AddScoped(typeof(IRepositoryBaseAsync<,,>), typeof(RepositoryBaseAsync<,,>))
+        .AddScoped(typeof(IRepositoryBase<,,>), typeof(RepositoryBase<,,>))
         .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
         .AddScoped<ICustomerService, CustomerService>();
     
@@ -41,6 +41,9 @@ try
 
     app.MapGet("/api/customers", 
         async (ICustomerService customerService) => await customerService.GetCustomerAsync());
+
+    app.MapGet("/api/customers/{id}",
+        async (int id, ICustomerService customerService) => await customerService.GetCustomer(id));
 
     // 1st code
     /*app.MapGet("/api/customers/{username}",

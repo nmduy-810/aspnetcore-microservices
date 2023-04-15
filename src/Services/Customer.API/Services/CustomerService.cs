@@ -23,6 +23,8 @@ public class CustomerService : ICustomerService
     public async Task<IResult> GetCustomerAsync() => 
         Results.Ok(await _customerRepository.GetCustomerAsync());
 
+    public async Task<IResult> GetCustomer(int id) => Results.Ok(await _customerRepository.GetCustomerById(id));
+
     public async Task<IResult> CreateCustomer(CreateCustomerDto customerDto)
     {
         var customer = _mapper.Map<CatalogCustomer>(customerDto);

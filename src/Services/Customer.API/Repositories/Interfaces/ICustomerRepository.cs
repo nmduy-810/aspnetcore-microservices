@@ -4,7 +4,7 @@ using Customer.API.Persistence;
 
 namespace Customer.API.Repositories.Interfaces;
 
-public interface ICustomerRepository : IRepositoryBaseAsync<CatalogCustomer, int, CustomerContext>
+public interface ICustomerRepository : IRepositoryBase<CatalogCustomer, int, CustomerContext>
 {
     Task<CatalogCustomer> GetCustomerByUserNameAsync(string userName);
     Task<IEnumerable<CatalogCustomer>> GetCustomerAsync();

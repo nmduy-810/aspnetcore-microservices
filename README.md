@@ -74,3 +74,4 @@ docker-compose down
 - dotnet watch run --environment "Development"
 - dotnet restore
 - dotnet build
+

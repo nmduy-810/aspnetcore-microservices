@@ -1,6 +1,8 @@
 version: '3.8'
 
 services:
+  #database section
+  
   #orderdb: sql server
   orderdb:
     container_name: orderdb
@@ -12,15 +14,12 @@ services:
       - sqlserver_data:/var/lib/sqlserver/data
     ports:
       - "1435:1433"
-    
+  
   #productdb: mysql
   productdb:
     container_name: productdb
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: "Passw0rd!"
-      MYSQL_TCP_PORT: 3306
-      MYSQL_DATABASE: ProductDB
     restart: always
     volumes:
       - mysql_data:/var/lib/mysql
@@ -32,8 +31,8 @@ services:
     container_name: customerdb
     environment:
       - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=Passw0rd!
-      - POSTGRES_DB=CustomerDB
+      - POSTGRES_PASSWORD=admin1234
+      - POSTGRES_DB=CustomerDb
     restart: always
     ports:
       - "5433:5432"
@@ -46,7 +45,7 @@ services:
     restart: always
     ports:
       - "6379:6379"
-        
+  
   #inventorydb: mongo
   inventorydb:
     container_name: inventorydb
@@ -55,8 +54,9 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-        
+  
   #infrastructure section
+  
   rabbitmq:
     container_name: rabbitmq
     restart: always
@@ -67,14 +67,14 @@ services:
   pgadmin:
     container_name: pgadmin
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@tedu_microservice.com
-      - PGADMIN_DEFAULT_PASSWORD=Passw0rd!
+      - PGADMIN_DEFAULT_EMAIL=admin@tedu.com.vn
+      - PGADMIN_DEFAULT_PASSWORD=admin1234
     restart: always
     ports:
       - "5050:80"
     volumes:
       - pgadmin_data:/root/.pgadmin
-
+  
   portainer:
     container_name: portainer
     restart: always
@@ -84,7 +84,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
-
+  
   elasticsearch:
     container_name: elasticsearch
     environment:
@@ -96,7 +96,7 @@ services:
       - "9200:9200"
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
-
+  
   kibana:
     container_name: kibana
     environment:
@@ -105,16 +105,29 @@ services:
       - elasticsearch
     ports:
       - "5601:5601"
-        
-  #microservices api section
+  
+  
+  #microservices api sections
   product.api:
     container_name: product.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - "ConnectionStrings:DefaultConnectionString=Server=productdb;Port=3306;Database=ProductDB;Uid=root;Pwd=Passw0rd!;"
-    depends_on: 
+      - "ConnectionStrings:DefaultConnectionString=Server=productdb;Port=3306;Database=ProductDB;Uid=root;Pwd=Passw0rd!"
+    depends_on:
       - productdb
     ports:
       - "6002:80"
+    restart: always
+  
+  customer.api:
+    container_name: customer.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Server=customerdb;Port=5432;Database=CustomerDb;User Id=admin;Password=admin1234"
+    depends_on:
+      - customerdb
+    ports:
+      - "6003:80"
     restart: always

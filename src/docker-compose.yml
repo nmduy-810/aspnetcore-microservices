@@ -13,10 +13,10 @@ services:
   
   basketdb:
     image: redis:alpine
-  
+
   inventorydb:
     image: mongo
-    
+
   #infrastructure section
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -32,14 +32,21 @@ services:
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.17.2
-    
+  
   #microservices api section
   product.api:
     image: ${DOCKER_REGISTRY-}product-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Services/Product.API/Dockerfile
-    
+  
+  customer.api:
+    image: ${DOCKER_REGISTRY-}customer-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Customer.API/Dockerfile
+
+
 #network section
 networks:
   default:
