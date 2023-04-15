@@ -33,7 +33,7 @@ catch (Exception e)
         throw;
     }
     
-    Log.Fatal(e, $"Unhandled exception: {e.Message}");
+    Log.Fatal(e, "Unhandled exception: {EMessage}", e.Message);
 }
 finally
 {
