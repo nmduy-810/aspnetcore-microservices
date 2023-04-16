@@ -34,7 +34,7 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d --remo
 - Product API: http://localhost:6002/api/products
 
 ## Docker Application URLs - LOCAL Environment (Docker Container):
-- Portainer: http://localhost:9000 - username: admin ; pass: Admin123456@
+- Portainer: http://localhost:9000 - username: admin ; pass: clear
 - Kibana: http://localhost:5601 - username: elastic ; pass: admin
 - RabbitMQ: http://localhost:15672 - username: guest ; pass: guest
 
@@ -74,4 +74,12 @@ docker-compose down
 - dotnet watch run --environment "Development"
 - dotnet restore
 - dotnet build
+
+
+## Connect to Redis Server (basketdb)
+
+Để kết nối tới Redis bằng lệnh redis-server trong command terminal, bạn cần phải kết nối vào container Redis đó. 
+Bạn có thể làm điều này bằng cách sử dụng lệnh docker exec để kết nối vào container Redis đang chạy. Ví dụ:
+
+- docker exec -it basketdb redis-cli
 
