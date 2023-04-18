@@ -11,6 +11,9 @@ public static class ConfigureServices
     {
         services.AddDbContext<OrderContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString"),
             builder => builder.MigrationsAssembly(typeof(OrderContext).Assembly.FullName)));
+
+        services.AddScoped<OrderContextSeed>(); // Seed data when start Ordering.API
+        
         return services;
     }
 }
