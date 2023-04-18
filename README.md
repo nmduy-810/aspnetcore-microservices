@@ -87,3 +87,9 @@ Bạn có thể làm điều này bằng cách sử dụng lệnh docker exec đ
 
 - docker exec -it basketdb redis-cli
 
+## Clean Architecture
+Create 1 project Web API, 3 class library
+1. Web API (reference: Infrastructure)
+2. Infrastructure (reference: Application)
+3. Application (reference: Domain)
+4. Domain (not reference)
