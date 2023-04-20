@@ -1,4 +1,5 @@
 using Common.Logging;
+using Ordering.API.Extensions;
 using Ordering.Application;
 using Ordering.Infrastructure;
 using Ordering.Infrastructure.Persistence;
@@ -13,8 +14,10 @@ try
     builder.Host.UseSerilog(Serilogger.Configure);
     
     // Add services to the container.
+    builder.Host.AddAppConfigurations();
+    
+    builder.Services.AddConfigurationSettings(builder.Configuration);
     builder.Services.AddInfrastructure(builder.Configuration);
-
     builder.Services.AddApplicationServices();
 
     builder.Services.AddControllers();
@@ -37,7 +40,7 @@ try
     await orderContextSeed.InitialiseAsync();
     await orderContextSeed.SeedAsync();
 
-    app.UseHttpsRedirection();
+    //app.UseHttpsRedirection();
 
     app.UseAuthorization();
 
