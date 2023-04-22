@@ -24,9 +24,6 @@ try
     builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddApplicationServices();
 
-    builder.Services.AddScoped<IMessageProducer, RabbitMqProducer>();
-    builder.Services.AddScoped<ISerializeService, SerializeService>();
-
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
