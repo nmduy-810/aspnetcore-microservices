@@ -18,19 +18,9 @@ namespace Ordering.API.Controllers;
 public class OrderController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly ISmtpEmailService _smtpEmailService;
-    private readonly IMessageProducer _messageProducer;
-
-    private readonly IOrderRepository _orderRepository;
-    private readonly IMapper _mapper;
-
-    public OrderController(IMediator mediator, ISmtpEmailService smtpEmailService, IMessageProducer messageProducer, IOrderRepository orderRepository, IMapper mapper)
+    public OrderController(IMediator mediator)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _smtpEmailService = smtpEmailService;
-        _messageProducer = messageProducer ?? throw new ArgumentNullException(nameof(messageProducer));
-        _orderRepository = orderRepository;
-        _mapper = mapper;
     }
 
     private static class RouteNames
@@ -46,29 +36,4 @@ public class OrderController : ControllerBase
         var result = await _mediator.Send(query);
         return Ok(result);
     }
-
-    [HttpGet("test-email")]
-    public async Task<IActionResult> TestEmail()
-    {
-        var message = new MailRequest()
-        {
-            Body = "hello",
-            Subject = "test",
-            ToAddress = "duynguyen8101996@gmail.com"
-        };
-
-        await _smtpEmailService.SendEmailAsync(message);
-        return Ok();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateOrder(OrderDto orderDto)
-    {
-        var order = _mapper.Map<Order>(orderDto);
-        var addOrder = await _orderRepository.CreateOrder(order);
-        var result = _mapper.Map<OrderDto>(addOrder);
-        _messageProducer.SendMessage(result);
-        return Ok(result);
-    }
-
 }
