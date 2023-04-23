@@ -22,4 +22,12 @@ public class OrderRepository : RepositoryBase<Order, long, OrderContext>, IOrder
         await SaveChangesAsync();
         return order;
     }
+
+    public async Task<Order> UpdateOrder(Order order)
+    {
+        await UpdateAsync(order);
+        return order;
+    }
+
+    public void DeleteOrder(Order order) => DeleteAsync(order);
 }
