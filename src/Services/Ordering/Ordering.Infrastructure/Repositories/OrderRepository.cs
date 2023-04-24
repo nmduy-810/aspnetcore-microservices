@@ -16,12 +16,7 @@ public class OrderRepository : RepositoryBase<Order, long, OrderContext>, IOrder
     public async Task<IEnumerable<Order>> GetOrdersByUserName(string userName) =>
         await FindByCondition(x => x.UserName.Equals(userName)).ToListAsync();
 
-    public async Task<Order> CreateOrder(Order order)
-    {
-        await CreateAsync(order);
-        await SaveChangesAsync();
-        return order;
-    }
+    public void CreateOrder(Order order) => Create(order);
 
     public async Task<Order> UpdateOrder(Order order)
     {
@@ -29,5 +24,5 @@ public class OrderRepository : RepositoryBase<Order, long, OrderContext>, IOrder
         return order;
     }
 
-    public void DeleteOrder(Order order) => DeleteAsync(order);
+    public void DeleteOrder(Order order) => Delete(order);
 }

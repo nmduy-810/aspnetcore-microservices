@@ -30,14 +30,15 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Api
         _logger.Information("BEGIN {MethodName} - Username: {RequestUserName}", MethodName, request.UserName);
 
         var orderEntity = _mapper.Map<Order>(request);
-        var addOrder = await _orderRepository.CreateOrder(orderEntity);
+        _orderRepository.CreateOrder(orderEntity);
+        orderEntity.AddedOrder();
         await _orderRepository.SaveChangesAsync();
         
-        _logger.Information("Order {Id} is successfully created", addOrder.Id);
+        _logger.Information("Order {Id} is successfully created", orderEntity.Id);
 
         //SendEmailAsync(addOrder, cancellationToken);
         
         _logger.Information("END {MethodName} - Username: {RequestUserName}", MethodName, request.UserName);
-        return new ApiSuccessResult<long>(addOrder.Id);
+        return new ApiSuccessResult<long>(orderEntity.Id);
     }
 }
