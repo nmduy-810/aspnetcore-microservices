@@ -22,7 +22,7 @@ public abstract class ProductContextSeed
         {
             new()
             {
-                No = "Mobile",
+                No = "Apple",
                 Name = "Iphone 13 Pro Max",
                 Summary = "Expensive smart phone",
                 Description = "This is a smartphone very beautiful",
@@ -30,7 +30,7 @@ public abstract class ProductContextSeed
             },
             new()
             {
-                No = "Mobile",
+                No = "Samsung",
                 Name = "Samsung",
                 Summary = "Cheap smart phone",
                 Description = "A smartphone with very cheap, bad screen",
