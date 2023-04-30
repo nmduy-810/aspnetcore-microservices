@@ -1,9 +1,11 @@
 using Inventory.Product.API.Entity.Abstraction;
+using Inventory.Product.API.Extensions;
 using MongoDB.Bson.Serialization.Attributes;
 using Shared.Enums.Inventory;
 
 namespace Inventory.Product.API.Entity;
 
+[BsonCollection("InventoryEntries")]
 public sealed class InventoryEntry : MongoEntity
 {
     public InventoryEntry()

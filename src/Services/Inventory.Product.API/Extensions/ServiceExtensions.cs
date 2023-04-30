@@ -1,4 +1,6 @@
 using Infrastructure.Extensions;
+using Inventory.Product.API.Services;
+using Inventory.Product.API.Services.Interfaces;
 using MongoDB.Driver;
 
 namespace Inventory.Product.API.Extensions;
@@ -14,6 +16,7 @@ public static class ServiceExtensions
     {
         var databaseSettings = configuration.GetSection(nameof(DatabaseSettings)).Get<DatabaseSettings>();
         services.AddSingleton(databaseSettings);
+        services.AddScoped<IInventoryService, InventoryService>();
     }
 
     private static string GetMongoConnectionString(this IServiceCollection services)
