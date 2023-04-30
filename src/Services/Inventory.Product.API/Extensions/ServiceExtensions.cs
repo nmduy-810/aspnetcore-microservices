@@ -10,13 +10,13 @@ public static class ServiceExtensions
     public static void AddInfrastructureServices(this IServiceCollection services)
     {
         services.AddAutoMapper(cfg => cfg.AddProfile(new MappingProfile()));
+        services.AddScoped<IInventoryService, InventoryService>();
     }
     
     public static void AddConfigurationSettings(this IServiceCollection services, IConfiguration configuration)
     {
         var databaseSettings = configuration.GetSection(nameof(DatabaseSettings)).Get<DatabaseSettings>();
         services.AddSingleton(databaseSettings);
-        services.AddScoped<IInventoryService, InventoryService>();
     }
 
     private static string GetMongoConnectionString(this IServiceCollection services)
