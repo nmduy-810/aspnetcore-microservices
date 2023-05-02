@@ -1,6 +1,6 @@
+using Contracts.Common.Interfaces;
 using Infrastructure.Common.Models;
 using Inventory.Product.API.Entity;
-using Inventory.Product.API.Repositories.Abstraction;
 using Shared.DTOs.Inventory;
 
 namespace Inventory.Product.API.Services.Interfaces;

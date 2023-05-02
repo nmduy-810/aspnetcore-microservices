@@ -1,7 +1,7 @@
-using Inventory.Product.API.Entity.Abstraction;
+using Contracts.Domains;
 using MongoDB.Driver;
 
-namespace Inventory.Product.API.Repositories.Abstraction;
+namespace Contracts.Common.Interfaces;
 
 public interface IMongoDbRepositoryBase<T> where T : MongoEntity
 {
