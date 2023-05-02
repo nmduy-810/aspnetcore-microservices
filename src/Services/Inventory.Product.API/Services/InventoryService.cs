@@ -27,7 +27,7 @@ public class InventoryService : MongoDbRepository<InventoryEntry>, IInventorySer
         return result;
     }
 
-    public async Task<IEnumerable<InventoryEntryDto>> GetAllByItemNoPagingAsync(GetInventoryPagingQuery query)
+    public async Task<PagedList<InventoryEntryDto>> GetAllByItemNoPagingAsync(GetInventoryPagingQuery query)
     {
         var filterSearchTerm = Builders<InventoryEntry>.Filter.Empty;
         var filterItemNo = Builders<InventoryEntry>.Filter.Eq(x => x.ItemNo, query.ItemNo());

@@ -17,18 +17,17 @@ public sealed class InventoryEntry : MongoEntity
     
     public InventoryEntry(string id) => (Id) = id;
 
-    [BsonElement("documentType")]
-    public EDocumentType DocumentType { get; set; }
+    [BsonElement("documentType")] public EDocumentType DocumentType { get; set; }
 
     [BsonElement("documentNo")]
-    public string DocumentNo { get; set; } = default!;
+    public string DocumentNo { get; set; } = Guid.NewGuid().ToString();
 
     [BsonElement("itemNo")]
     public string ItemNo { get; set; } = default!;
 
     [BsonElement("quantity")]
-    public int Quantity { get; set; } = default!;
+    public int Quantity { get; set; }
 
     [BsonElement("externalDocumentNo")]
-    public string ExternalDocumentNo { get; set; } = default!;
+    public string ExternalDocumentNo { get; set; } = Guid.NewGuid().ToString();
 }
