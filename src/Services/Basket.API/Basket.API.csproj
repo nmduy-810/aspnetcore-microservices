@@ -23,13 +23,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Protobuf Include="..\..\..\..\Inventory.Grpc\Inventory.Grpc\Protos\stock.proto" GrpcService="Client">
-        <Link>Protos\stock.proto</Link>
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Protobuf>
       <Content Include="..\..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+      <Protobuf Include="..\Inventory\Inventory.Grpc\Protos\stock.proto" GrpcService="Client">
+        <Link>Protos\stock.proto</Link>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Protobuf>
     </ItemGroup>
 
 </Project>
