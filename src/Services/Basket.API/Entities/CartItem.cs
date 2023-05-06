@@ -13,4 +13,8 @@ public class CartItem
     public decimal ItemPrice { get; set; } = default!;
     public string ItemNo { get; set; } = default!;
     public string ItemName { get; set; } = default!;
+
+    public int AvailableQuantity { get; set; } // So luong hien co
+
+    public void SetAvailableQuantity(int quantity) => (AvailableQuantity) = quantity;
 }

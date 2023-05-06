@@ -24,6 +24,9 @@ try
     
     builder.Services.ConfigureServices();
     builder.Services.ConfigureRedis(builder.Configuration);
+
+    // Config grpc services
+    builder.Services.ConfigureGrpcServices();
     
     builder.Services.AddControllers();
     

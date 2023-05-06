@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using AutoMapper;
 using Basket.API.Entities;
+using Basket.API.GrpcServices;
 using Basket.API.Repositories.Interfaces;
 using EventBus.Messages.IntegrationEvents.Events;
 using MassTransit;
@@ -17,12 +18,14 @@ public class BasketController : ControllerBase
     private readonly IBasketRepository _basketRepository;
     private readonly IPublishEndpoint _publishEndpoint;
     private readonly IMapper _mapper;
-
-    public BasketController(IBasketRepository basketRepository, IPublishEndpoint publishEndpoint, IMapper mapper)
+    private readonly StockItemGrpcService _stockItemGrpcService;
+    
+    public BasketController(IBasketRepository basketRepository, IPublishEndpoint publishEndpoint, IMapper mapper, StockItemGrpcService stockItemGrpcService)
     {
         _basketRepository = basketRepository;
         _publishEndpoint = publishEndpoint;
         _mapper = mapper;
+        _stockItemGrpcService = stockItemGrpcService;
     }
 
     [HttpGet("{username}", Name = "GetBasket")]
@@ -37,6 +40,13 @@ public class BasketController : ControllerBase
     [ProducesResponseType(typeof(Cart), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<Cart>> UpdateBasket([FromBody] Cart cart)
     {
+        // Communication with Inventory.Grpc and check quantity available of products
+        foreach (var item in cart.CartItems)
+        {
+            var stock = await _stockItemGrpcService.GetStock(item.ItemNo);
+            item.SetAvailableQuantity(stock.Quantity);
+        }
+        
         var options = new DistributedCacheEntryOptions()
             .SetAbsoluteExpiration(DateTime.Now.AddHours(1)) // Set key tồn tại trong 1 giờ
             .SetSlidingExpiration(TimeSpan.FromMinutes(5)); // Kiểm tra xem trong 5 phút có hoạt động nào không
