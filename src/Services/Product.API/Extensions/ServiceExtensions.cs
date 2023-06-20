@@ -1,11 +1,18 @@
+using System.Text;
 using Contracts.Common.Interfaces;
+using Contracts.Identity;
 using Infrastructure.Common;
+using Infrastructure.Extensions;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MySqlConnector;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Product.API.Persistence;
 using Product.API.Repositories;
 using Product.API.Repositories.Interfaces;
+using Shared.Configurations;
 
 namespace Product.API.Extensions;
 
@@ -24,8 +31,49 @@ public static class ServiceExtensions
         services.AddInfrastructureServices(); // Config services
 
         services.AddAutoMapper(cfg => cfg.AddProfile(new MappingProfile())); // Config auto mapper
+
+        services.AddJwtAuthentication();
         
         return services;
+    }
+
+    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
+    {
+        var settings = services.GetOptions<JwtSettings>(nameof(JwtSettings));
+        if (settings == null || string.IsNullOrEmpty(settings.Key))
+            throw new ArgumentNullException($"{nameof(JwtSettings)} is not configured property");
+        
+        // Get key
+        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Key));
+
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = signingKey,
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = false,
+            ClockSkew = TimeSpan.Zero,
+            RequireExpirationTime = false
+        };
+        services.AddAuthentication(o =>
+        {
+            o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(x =>
+        {
+            x.SaveToken = true;
+            x.RequireHttpsMetadata = false;
+            x.TokenValidationParameters = tokenValidationParameters;
+        });
+
+        return services;
+    }
+    
+    public static void AddConfigurationSettings(this IServiceCollection services, IConfiguration configuration)
+    {
+        var settings = configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>();
+        services.AddSingleton(settings);
     }
 
     private static IServiceCollection ConfigureProductDbContext(this IServiceCollection services,
@@ -49,6 +97,7 @@ public static class ServiceExtensions
         return services
             .AddScoped(typeof(IRepositoryBase<,,>), typeof(RepositoryBase<,,>))
             .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
-            .AddScoped<IProductRepository, ProductRepository>();
+            .AddScoped<IProductRepository, ProductRepository>()
+            .AddTransient<ITokenService, TokenService>();
     }
 }

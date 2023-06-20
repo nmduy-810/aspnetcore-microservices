@@ -15,6 +15,9 @@ try
     // Add services to the container.
     builder.Services.AddInfrastructure(builder.Configuration);
 
+    // Add jwt settings configurations
+    builder.Services.AddConfigurationSettings(builder.Configuration);
+
     var app = builder.Build();
     app.UseInfrastructure();
 
