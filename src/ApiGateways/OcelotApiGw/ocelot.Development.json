@@ -44,7 +44,10 @@
           "Host": "localhost",
           "Port": 5002
         }
-      ]
+      ],
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      }
     },
     {
       "UpstreamPathTemplate": "/products",
