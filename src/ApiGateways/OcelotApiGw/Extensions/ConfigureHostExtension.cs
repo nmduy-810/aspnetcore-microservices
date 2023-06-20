@@ -1,3 +1,6 @@
+using Common.Logging;
+using Serilog;
+
 namespace OcelotApiGw.Extensions;
 
 public static class ConfigureHostExtension
@@ -11,6 +14,6 @@ public static class ConfigureHostExtension
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"ocelot.{env.EnvironmentName}.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
-        });
+        }).UseSerilog(Serilogger.Configure);
     }
 }

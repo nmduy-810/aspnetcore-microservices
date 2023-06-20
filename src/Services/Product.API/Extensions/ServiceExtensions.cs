@@ -37,7 +37,7 @@ public static class ServiceExtensions
         return services;
     }
 
-    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
+    private static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
     {
         var settings = services.GetOptions<JwtSettings>(nameof(JwtSettings));
         if (settings == null || string.IsNullOrEmpty(settings.Key))
@@ -97,7 +97,6 @@ public static class ServiceExtensions
         return services
             .AddScoped(typeof(IRepositoryBase<,,>), typeof(RepositoryBase<,,>))
             .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
-            .AddScoped<IProductRepository, ProductRepository>()
-            .AddTransient<ITokenService, TokenService>();
+            .AddScoped<IProductRepository, ProductRepository>();
     }
 }

@@ -7,14 +7,21 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateBootstrapLogger();
-Log.Information("Start Ocelot Gateway API up");
+Log.Information("Start {ApplicationName} up", builder.Environment.ApplicationName);
 
 try
 {
     // Add services to the container.
     builder.Host.UseSerilog(Serilogger.Configure);
-    builder.Services.AddConfigurationSettings(builder.Configuration);
+    
     builder.Host.AddAppConfigurations();
+    
+    builder.Services.AddConfigurationSettings(builder.Configuration);
+    
+    // Config authentication
+    builder.Services.AddJwtAuthentication();
+
+    builder.Services.AddInfrastructureServices();
     
     builder.Services.AddControllers();
     
@@ -38,9 +45,21 @@ try
     app.UseCors("CorsPolicy");
     app.UseMiddleware<ErrorWrappingMiddleware>();
 
+    app.UseAuthentication();
+
+    app.UseRouting();
+
     /*app.UseHttpsRedirection();*/
 
     app.UseAuthorization();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapGet("/", async context =>
+        {
+            await context.Response.WriteAsync("Hello World");
+        });
+    });
 
     app.MapControllers();
 
@@ -58,6 +77,6 @@ catch (Exception e)
 }
 finally
 {
-    Log.Information("Shut down Ocelot Gateway API complete", builder.Environment.ApplicationName);
+    Log.Information("Shut down {ApplicationName} complete", builder.Environment.ApplicationName);
     Log.CloseAndFlush();
 }
