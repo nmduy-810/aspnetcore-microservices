@@ -104,3 +104,12 @@ cd into Ordering folder
 dotnet ef migrations add "SampleMigration" -p Ordering.Infrastructure --startup-project Ordering.API --output-dir Persistence/Migrations
 dotnet ef migrations remove -p Ordering.Infrastructure --startup-project Ordering.API
 dotnet ef database update -p Ordering.Infrastructure --startup-project Ordering.API
+
+## Rate Limiting Ocelot
+"RateLimitOptions": {
+- "ClientWhitelist": [],
+- "EnableRateLimiting": true, // the client in this array will not be affected by the rate limit
+- "Period": "2s", // 1s, 2m, 1h, 1d
+- "PeriodTimespan": 1 // retry after a certain number of seconds
+- "Limit": 1 // the maximum number of request that a client can make in a defined period
+}
