@@ -113,3 +113,10 @@ dotnet ef database update -p Ordering.Infrastructure --startup-project Ordering.
 - "PeriodTimespan": 1 // retry after a certain number of seconds
 - "Limit": 1 // the maximum number of request that a client can make in a defined period
 }
+
+## QoS Ocelot
+"QoSOptions": {
+- "ExceptionAllowedBeforeBreaking": 2, // If the service does not response for 2 seconds, it will throw a timeout exception
+- "DurationOfBreak": 1000, // 1s (1000ms)
+- "TimeoutValue": 5000 // if the service throws a second exception, the service will not be accessible for five seconds
+}

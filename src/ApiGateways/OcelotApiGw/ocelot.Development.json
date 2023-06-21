@@ -69,6 +69,11 @@
         "Period": "2s",
         "PeriodTimespan": 1,
         "Limit": 1
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 5000
       }
     },
     {

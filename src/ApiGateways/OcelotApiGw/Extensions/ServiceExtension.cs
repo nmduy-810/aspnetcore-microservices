@@ -5,6 +5,7 @@ using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
+using Ocelot.Provider.Polly;
 using Shared.Configurations;
 
 namespace OcelotApiGw.Extensions;
@@ -53,7 +54,8 @@ public static class ServiceExtension
 
     public static void ConfigureOcelot(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddOcelot(configuration);
+        // AddPolly (config for using QoS)
+        services.AddOcelot(configuration).AddPolly();
     }
 
     public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
