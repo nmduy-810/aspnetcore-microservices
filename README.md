@@ -115,8 +115,18 @@ dotnet ef database update -p Ordering.Infrastructure --startup-project Ordering.
 }
 
 ## QoS Ocelot
+> Ocelot.Polly (package)
+
 "QoSOptions": {
 - "ExceptionAllowedBeforeBreaking": 2, // If the service does not response for 2 seconds, it will throw a timeout exception
 - "DurationOfBreak": 1000, // 1s (1000ms)
 - "TimeoutValue": 5000 // if the service throws a second exception, the service will not be accessible for five seconds
+}
+
+## Caching in Ocelot
+> Ocelot.Cache.CacheManager (package)
+
+"FileCacheOptions": {
+- "TtlSeconds": 15
+
 }

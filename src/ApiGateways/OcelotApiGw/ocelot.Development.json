@@ -52,7 +52,6 @@
     {
       "UpstreamPathTemplate": "/products",
       "UpstreamHttpMethod": [
-        "GET",
         "POST"
       ],
       "DownstreamPathTemplate": "/api/products",
@@ -74,6 +73,35 @@
         "ExceptionsAllowedBeforeBreaking": 2,
         "DurationOfBreak": 1000,
         "TimeoutValue": 5000
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/products",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/products",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "10s",
+        "PeriodTimespan": 2,
+        "Limit": 5
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 1000,
+        "TimeoutValue": 5000
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 15
       }
     },
     {

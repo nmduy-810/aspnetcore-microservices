@@ -23,18 +23,18 @@ public class ProductsController : ControllerBase
 
     #region CRUD
 
-    private static int count = 0; // Test QoS in Ocelot
+    /*private static int count = 0; // Test QoS in Ocelot*/
 
     [HttpGet]
     public async Task<IActionResult> GetProducts()
     {
         // Test QoS in Ocelot
-        count++;
+        /*count++;
         Console.WriteLine($"get ...{count}");
         if (count < 3)
         {
             Thread.Sleep(5000);
-        }
+        }*/
         //--------------------
         
         var products = await _productRepository.GetProducts();
