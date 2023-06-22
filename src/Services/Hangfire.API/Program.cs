@@ -14,6 +14,8 @@ try
 
     builder.Services.AddConfigurationSettings(builder.Configuration);
 
+    builder.Services.ConfigureServices();
+
     builder.Host.AddAppConfigurations();
 
     builder.Services.AddHangFireServicesCore();
