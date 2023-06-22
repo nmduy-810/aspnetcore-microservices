@@ -7,7 +7,8 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Log.Information("Start Ordering API up");
+Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateBootstrapLogger();
+Log.Information("Start {ApplicationName} up", builder.Environment.ApplicationName);
 
 try
 {
