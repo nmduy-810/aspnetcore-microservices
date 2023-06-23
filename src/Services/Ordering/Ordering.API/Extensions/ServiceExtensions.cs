@@ -13,7 +13,7 @@ public static class ServiceExtensions
     internal static IServiceCollection AddConfigurationSettings(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var emailSettings = configuration.GetSection(nameof(SmtpEmailSetting)).Get<SmtpEmailSetting>();
+        var emailSettings = configuration.GetSection(nameof(SmtpEmailSettings)).Get<SmtpEmailSettings>();
         services.AddSingleton(emailSettings); // duy tri xuyen suot toan bo ung dung
 
         return services;

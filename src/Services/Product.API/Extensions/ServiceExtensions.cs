@@ -79,13 +79,15 @@ public static class ServiceExtensions
     private static IServiceCollection ConfigureProductDbContext(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnectionString"); // Get connection string in application.json
-        var builder = new MySqlConnectionStringBuilder(connectionString); // Create builder use build connection
-
-        services.AddDbContext<ProductContext>(options => options.UseMySql(builder.ConnectionString,
+        var databaseSettings = configuration.GetSection(nameof(DatabaseSettings)).Get<DatabaseSettings>();
+        if (databaseSettings == null || string.IsNullOrEmpty(databaseSettings.ConnectionString))
+            throw new ArgumentNullException($"Connection string is not configured");
+        
+        var builder = new MySqlConnectionStringBuilder(databaseSettings.ConnectionString);
+        services.AddDbContext<ProductContext>(m => m.UseMySql(builder.ConnectionString, 
             ServerVersion.AutoDetect(builder.ConnectionString), e =>
             {
-                e.MigrationsAssembly("Product.API"); // Migration project name
+                e.MigrationsAssembly("Product.API");
                 e.SchemaBehavior(MySqlSchemaBehavior.Ignore);
             }));
 

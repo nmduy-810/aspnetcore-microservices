@@ -26,11 +26,18 @@ public static class ServiceExtension
         var eventBusSettings = configuration.GetSection(nameof(EventBusSettings)).Get<EventBusSettings>();
         var cacheSettings = configuration.GetSection(nameof(CacheSettings)).Get<CacheSettings>();
         var grpcSettings = configuration.GetSection(nameof(GrpcSettings)).Get<GrpcSettings>();
+        var backgroundJobSettings = configuration.GetSection(nameof(BackgroundJobSettings)).Get<BackgroundJobSettings>();
         
         services.AddSingleton(eventBusSettings);
         services.AddSingleton(cacheSettings);
         services.AddSingleton(grpcSettings);
+        services.AddSingleton(backgroundJobSettings);
         return services;
+    }
+
+    public static void ConfigureHttpClientServices(this IServiceCollection services)
+    {
+        services.AddHttpClient<BackgroundJobHttpService>();
     }
     
     public static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)

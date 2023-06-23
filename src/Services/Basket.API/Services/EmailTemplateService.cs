@@ -6,8 +6,8 @@ namespace Basket.API.Services;
 public class EmailTemplateService
 {
     protected readonly BackgroundJobSettings BackgroundJobSettings;
-    
-    public EmailTemplateService(BackgroundJobSettings settings)
+
+    protected EmailTemplateService(BackgroundJobSettings settings)
     {
         BackgroundJobSettings = settings;
     }
