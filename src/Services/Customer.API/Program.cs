@@ -89,8 +89,6 @@ try
     
     // Seed customer data
     app.SeedCustomerData().Run();
-
-    app.Run();
 }
 catch (Exception e)
 {
