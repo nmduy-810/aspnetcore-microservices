@@ -64,7 +64,7 @@ public class BasketRepository : IBasketRepository
         var emailTemplate = _emailTemplateService.GenerateReminderCheckoutOrderEmail(cart.UserName);
 
         var model = new ReminderCheckoutOrderDto(cart.EmailAddress, "Reminder checkout", emailTemplate,
-            DateTimeOffset.UtcNow.AddSeconds(30));
+            DateTimeOffset.UtcNow.AddSeconds(5));
 
         var uri = $"{_backgroundJobHttpService.ScheduledJobUrl}/send-email-reminder-checkout-order";
         
