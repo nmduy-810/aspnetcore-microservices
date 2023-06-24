@@ -6,6 +6,11 @@ public class Cart
     
     public string EmailAddress { get; set; } = default!;
     public List<CartItem> CartItems { get; set; } = new();
+
+    public Cart(string userName)
+    {
+        UserName = userName;
+    }
     
     public Cart()
     {

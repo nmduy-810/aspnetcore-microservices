@@ -4,11 +4,11 @@ using AutoMapper;
 using Basket.API.Entities;
 using Basket.API.GrpcServices;
 using Basket.API.Repositories.Interfaces;
-using Basket.API.Services.Interfaces;
 using EventBus.Messages.IntegrationEvents.Events;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using Shared.DTOs.Basket;
 
 namespace Basket.API.Controllers;
 
@@ -30,19 +30,20 @@ public class BasketController : ControllerBase
     }
 
     [HttpGet("{username}", Name = "GetBasket")]
-    [ProducesResponseType(typeof(Cart), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<Cart>> GetBasketByUserName([Required] string username)
+    [ProducesResponseType(typeof(CartDto), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<CartDto>> GetBasketByUserName([Required] string username)
     {
-        var result = await  _basketRepository.GetBasketByUserName(username);
-        return Ok(result ?? new Cart());
+        var cart = await  _basketRepository.GetBasketByUserName(username);
+        var result = _mapper.Map<CartDto>(cart) ?? new CartDto(username);
+        return Ok(result);
     }
 
     [HttpPost(Name = "UpdateBasket")]
-    [ProducesResponseType(typeof(Cart), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<Cart>> UpdateBasket([FromBody] Cart cart)
+    [ProducesResponseType(typeof(CartDto), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<CartDto>> UpdateBasket([FromBody] CartDto model)
     {
         // Communication with Inventory.Grpc and check quantity available of products
-        foreach (var item in cart.CartItems)
+        foreach (var item in model.Items)
         {
             var stock = await _stockItemGrpcService.GetStock(item.ItemNo);
             item.SetAvailableQuantity(stock.Quantity);
@@ -52,7 +53,9 @@ public class BasketController : ControllerBase
             .SetAbsoluteExpiration(DateTime.Now.AddHours(1)) // Set key tồn tại trong 1 giờ
             .SetSlidingExpiration(TimeSpan.FromMinutes(5)); // Kiểm tra xem trong 5 phút có hoạt động nào không
 
-        var result = await _basketRepository.UpdateBasket(cart, options);
+        var cart = _mapper.Map<Cart>(model);
+        var updateCart = await _basketRepository.UpdateBasket(cart, options);
+        var result = _mapper.Map<CartDto>(updateCart);
         return Ok(result);
     }
 
