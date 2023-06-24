@@ -19,7 +19,7 @@ public class ScheduledJobsController : ControllerBase
     [Route("send-email-reminder-checkout-order")]
     public IActionResult SendReminderCheckoutOrderEmail([FromBody] ReminderCheckoutOrderDto model)
     {
-        var jobId = _backgroundJobService.SendEmailContent(model.Email, model.Subject, model.Email, model.EnqueueAt);
+        var jobId = _backgroundJobService.SendEmailContent(model.Email, model.Subject, model.EmailContent, model.EnqueueAt);
         return Ok(jobId);
     }
 }
