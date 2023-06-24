@@ -23,7 +23,8 @@ public static class HostExtensions
 
         app.UseHangfireDashboard(hangfireRoute, new DashboardOptions
         {
-            //Authorization = new [] {} 
+            // if tren moi truong docker ma khong khai bao Authorization se khong mo duoc dashboard
+            Authorization = new [] { new AuthorizationFilter() } ,
            DashboardTitle = configDashboard.DashboardTitle,
            StatsPollingInterval = configDashboard.StatsPollingInterval,
            AppPath = configDashboard.AppPath,
