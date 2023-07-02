@@ -52,7 +52,7 @@ public class OrderContextSeed
                 {
                     UserName = "customer1", FirstName = "customer1", LastName = "customer",
                     EmailAddress = "customer1@local.com",
-                    ShippingAddress = "82 Vo Van Ngan", InvoiceAddress = "Vietnam", TotalPrice = 250
+                    ShippingAddress = "82 Vo Van Ngan", InvoiceAddress = "Vietnam", TotalPrice = 250, DocumentNo = Guid.NewGuid().ToString()
                 });
         }
     }

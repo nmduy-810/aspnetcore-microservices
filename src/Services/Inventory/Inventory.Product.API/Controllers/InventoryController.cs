@@ -63,6 +63,26 @@ public class InventoryController : ControllerBase
         return Ok(result);
     }
     
+    [HttpPost("sales/{itemNo}", Name = "SalesItem")]
+    [ProducesResponseType(typeof(InventoryEntryDto), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<InventoryEntryDto>> SalesItem([Required] string itemNo, [FromBody] SalesProductDto model)
+    {
+        model.SetItemNo(itemNo);
+        var result = await _inventoryService.SalesItemAsync(itemNo, model);
+        return Ok(result);
+    }
+    
+    [HttpPost("sales/order-no/{orderNo}", Name = "SalesOrder")]
+    [ProducesResponseType(typeof(CreatedSalesOrderSuccessDto), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<CreatedSalesOrderSuccessDto>> SalesOrder([Required] string orderNo, 
+        [FromBody] SalesOrderDto model)
+    {
+        model.OrderNo = orderNo;
+        var documentNo = await _inventoryService.SalesOrderAsync(model);
+        var result = new CreatedSalesOrderSuccessDto(documentNo);
+        return Ok(result);
+    }
+    
     [Route("{id}", Name = "DeleteById")]
     [HttpDelete]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -71,6 +91,16 @@ public class InventoryController : ControllerBase
     {
         var entity = await _inventoryService.GetByIdAsync(id);
         await _inventoryService.DeleteAsync(id);
+        return NoContent();
+    }
+    
+    [Route("document-no/{documentNo}", Name = "DeleteByDocumentNo")]
+    [HttpDelete]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    public async Task<IActionResult> DeleteByDocumentNo([Required] string documentNo)
+    {
+        await _inventoryService.DeleteByDocumentNoAsync(documentNo);
         return NoContent();
     }
 }

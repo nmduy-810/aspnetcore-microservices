@@ -1,18 +1,18 @@
-using EventBus.Messages.IntegrationEvents.Interfaces;
+namespace Shared.DTOs.Basket;
 
-namespace EventBus.Messages.IntegrationEvents.Events;
-
-public record BasketCheckoutEvent() : IntegrationBaseEvent, IBasketCheckoutEvent
+public class BasketCheckoutDto
 {
     public string UserName { get; set; } = default!;
-    public decimal TotalPrice { get; set; }
+    
+    public decimal TotalPrice { get; set; } = default!;
     
     public string FirstName { get; set; } = default!;
     
     public string LastName { get; set; } = default!;
-    
+
     public string EmailAddress { get; set; } = default!;
-    public string ShippingAddress { get; set; } = default!;
+    
+    public string? ShippingAddress { get; set; }
     
     private string? _invoiceAddress;
     public string? InvoiceAddress

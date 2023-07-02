@@ -14,14 +14,14 @@ namespace Basket.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BasketController : ControllerBase
+public class BasketsController : ControllerBase
 {
     private readonly IBasketRepository _basketRepository;
     private readonly IPublishEndpoint _publishEndpoint;
     private readonly IMapper _mapper;
     private readonly StockItemGrpcService _stockItemGrpcService;
     
-    public BasketController(IBasketRepository basketRepository, IPublishEndpoint publishEndpoint, IMapper mapper, StockItemGrpcService stockItemGrpcService)
+    public BasketsController(IBasketRepository basketRepository, IPublishEndpoint publishEndpoint, IMapper mapper, StockItemGrpcService stockItemGrpcService)
     {
         _basketRepository = basketRepository ?? throw new ArgumentNullException(nameof(basketRepository));
         _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
@@ -30,7 +30,7 @@ public class BasketController : ControllerBase
     }
 
     [HttpGet("{username}", Name = "GetBasket")]
-    [ProducesResponseType(typeof(CartDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Cart), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<CartDto>> GetBasketByUserName([Required] string username)
     {
         var cart = await  _basketRepository.GetBasketByUserName(username);
