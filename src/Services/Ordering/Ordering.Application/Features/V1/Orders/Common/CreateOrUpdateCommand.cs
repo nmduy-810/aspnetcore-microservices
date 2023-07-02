@@ -11,7 +11,10 @@ public class CreateOrUpdateCommand : IMapFrom<Order>
     public string LastName { get; set; } = default!;
     public string EmailAddress { get; set; } = default!;
     public string ShippingAddress { get; set; } = default!;
+    
     public string InvoiceAddress { get; set; } = default!;
+
+    public Guid DocumentNo { get; set; } = Guid.NewGuid();
 
     public void Mapping(Profile profile)
     {
