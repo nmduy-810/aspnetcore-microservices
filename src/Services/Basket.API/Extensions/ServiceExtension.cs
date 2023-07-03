@@ -3,6 +3,7 @@ using Basket.API.Repositories;
 using Basket.API.Repositories.Interfaces;
 using Basket.API.Services;
 using Basket.API.Services.Interfaces;
+using Common.Logging;
 using Contracts.Common.Interfaces;
 using EventBus.Messages.IntegrationEvents.Interfaces;
 using Infrastructure.Common;
@@ -19,7 +20,8 @@ public static class ServiceExtension
     public static IServiceCollection ConfigureServices(this IServiceCollection services) =>
         services.AddScoped<IBasketRepository, BasketRepository>()
             .AddTransient<ISerializeService, SerializeService>()
-            .AddTransient<IEmailTemplateService, BasketEmailTemplateService>();
+            .AddTransient<IEmailTemplateService, BasketEmailTemplateService>()
+            .AddTransient<LoggingDelegatingHandler>();
 
     public static IServiceCollection AddConfigurationSettings(this IServiceCollection services, IConfiguration configuration)
     {
@@ -37,7 +39,7 @@ public static class ServiceExtension
 
     public static void ConfigureHttpClientServices(this IServiceCollection services)
     {
-        services.AddHttpClient<BackgroundJobHttpService>();
+        services.AddHttpClient<BackgroundJobHttpService>().AddHttpMessageHandler<LoggingDelegatingHandler>();
     }
     
     public static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)

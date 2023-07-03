@@ -32,8 +32,20 @@ public class BasketRepository : IBasketRepository
         _logger.Information("BEGIN: GetBasketByUserName {UserName}", userName);
         var basket = await _redisCacheService.GetStringAsync(userName);
         _logger.Information("END: GetBasketByUserName {UserName}", userName);
+
+        if (!string.IsNullOrEmpty(basket))
+        {
+            var result = _serializeService.Deserialize<Cart>(basket);
+            if (result == null) 
+                return result;
+            
+            var totalPrice = result.TotalPrice;
+            _logger.Information("END: GetBasketByUserName {Username} - Total Price: {TotalPrice}", userName, totalPrice);
+
+            return result;
+        }
         
-        return string.IsNullOrEmpty(basket) ? null : _serializeService.Deserialize<Cart>(basket);
+        return null;
     }
 
     public async Task<Cart?> UpdateBasket(Cart cart, DistributedCacheEntryOptions? options = null)
