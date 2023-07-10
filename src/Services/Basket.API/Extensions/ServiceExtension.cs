@@ -8,6 +8,7 @@ using Contracts.Common.Interfaces;
 using EventBus.Messages.IntegrationEvents.Interfaces;
 using Infrastructure.Common;
 using Infrastructure.Extensions;
+using Infrastructure.Policies;
 using Inventory.Grpc.Client;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -39,7 +40,9 @@ public static class ServiceExtension
 
     public static void ConfigureHttpClientServices(this IServiceCollection services)
     {
-        services.AddHttpClient<BackgroundJobHttpService>().AddHttpMessageHandler<LoggingDelegatingHandler>();
+        services.AddHttpClient<BackgroundJobHttpService>()
+            .AddHttpMessageHandler<LoggingDelegatingHandler>()
+            .UseLinearHttpRetryPolicy(); // polly config
     }
     
     public static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)
